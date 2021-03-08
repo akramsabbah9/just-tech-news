@@ -101,8 +101,8 @@ router.post("/", (req, res) => {
 router.put("/upvote", (req, res) => {
     // expects {user_id, post_id} in req.body
     // custom static method created in models/Post.js
-    Post.upvote(req.body, { Vote })
-    .then(updatedPostData => res.json(updatedPostData))
+    Post.upvote(req.body, { Vote, Comment, User })
+    .then(updatedVoteData => res.json(updatedVoteData))
     .catch(err => {
         console.log(err);
         res.status(500).json(err);
@@ -122,7 +122,7 @@ router.put("/:id", (req, res) => {
         }
     })
     .then(dbPostData => {
-        if (!dbPostData) {
+        if (!dbPostData[0]) {
             res.status(404).json({ message: "No post found with this id" });
             return;
         }
