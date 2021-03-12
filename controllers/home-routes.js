@@ -2,6 +2,7 @@ const router = require("express").Router();
 const sequelize = require("../config/connection");
 const {Post, User, Comment } = require("../models");
 
+// get all posts for homepage
 router.get("/", (req, res) => {
     console.log(req.session);
     Post.findAll({
@@ -32,8 +33,11 @@ router.get("/", (req, res) => {
     })
     .then(dbPostData => {
         const posts = dbPostData.map(post => post.get({ plain: true }));
-        // pass a single post object into homepage template
-        res.render("homepage", { posts });
+        // pass the posts into homepage template, and whether the user is logged in
+        res.render("homepage", {
+            posts,
+            loggedIn: req.session.loggedIn
+        });
     })
     .catch(err => {
         console.log(err);
@@ -41,15 +45,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/login", (req, res) => {
-    if (req.session.loggedIn) {
-        res.redirect("/");
-        return;
-    }
-
-    res.render("login");
-});
-
+// get a single post
 router.get("/post/:id", (req, res) => {
     Post.findOne({
         where: {
@@ -90,13 +86,25 @@ router.get("/post/:id", (req, res) => {
         const post = dbPostData.get({ plain: true });
 
         // pass data to template
-        res.render("single-post", { post });
+        res.render("single-post", {
+            post,
+            loggedIn: req.session.loggedIn
+        });
     })
     .catch(err => {
         console.log(err);
         res.status(500).json(err);
     });
+});
 
+// send user to login page
+router.get("/login", (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect("/");
+        return;
+    }
+
+    res.render("login");
 });
 
 module.exports = router;
