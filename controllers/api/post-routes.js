@@ -84,11 +84,11 @@ router.get("/:id", (req, res) => {
 
 // create a post
 router.post("/", (req, res) => {
-    // expects {title, post_url, user_id} in req.body
+    // expects {title, post_url} in req.body
     Post.create({
         title: req.body.title,
         post_url: req.body.post_url,
-        user_id: req.body.user_id
+        user_id: req.session.user_id
     })
     .then(dbPostData => res.json(dbPostData))
     .catch(err => {
