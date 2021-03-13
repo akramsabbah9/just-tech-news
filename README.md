@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a backend for a social media website made to practice with sequelize. It uses sequelize to make database models for site users, posts, upvotes, and comments.
+This is a social media website made to practice with sequelize and handlebars. It uses sequelize to make database models for site users, posts, upvotes, and comments. It uses handlebars and express to create and host frontend content.
 
 ## Usage
 
